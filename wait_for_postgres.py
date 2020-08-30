@@ -2,6 +2,12 @@ import os
 import logging
 from time import time, sleep
 import psycopg2
+
+start_time = time()
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
+
 check_timeout = os.getenv("POSTGRES_CHECK_TIMEOUT", 30)
 check_interval = os.getenv("POSTGRES_CHECK_INTERVAL", 1)
 logger.info(os.getenv("DATABASE_URL", "postgres"))
@@ -9,11 +15,6 @@ interval_unit = "second" if check_interval == 1 else "seconds"
 config = {
     "host": os.getenv("DATABASE_URL", "postgres")
 }
-
-start_time = time()
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
 
 
 def pg_isready(host, user, password, dbname):
