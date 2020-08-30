@@ -40,7 +40,7 @@ class Common(Configuration):
 
     ALLOWED_HOSTS = ["*"]
     ROOT_URLCONF = 'petstores-api.urls'
-    SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+    SECRET_KEY = 'csvdhbwwu89287'
     WSGI_APPLICATION = 'petstores-api.wsgi.application'
 
     # Email
