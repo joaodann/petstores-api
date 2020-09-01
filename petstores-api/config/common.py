@@ -16,6 +16,9 @@ class Common(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
 
+        #cors
+        'corsheaders',
+
 
         # Third party apps
         'rest_framework',            # utilities for rest apis
@@ -31,11 +34,13 @@ class Common(Configuration):
     MIDDLEWARE = (
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'corsheaders.middleware.CorsMiddleware',
+        'corsheaders.middleware.CorsPostCsrfMiddleware',
+        'django.middleware.common.CommonMiddleware',
     )
 
     ALLOWED_HOSTS = ["*"]
@@ -62,6 +67,16 @@ class Common(Configuration):
     APPEND_SLASH = False
     TIME_ZONE = 'UTC'
     LANGUAGE_CODE = 'en-us'
+    #cors
+    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ALLOW_METHODS = [
+        'DELETE',
+        'GET',
+        'OPTIONS',
+        'PATCH',
+        'POST',
+        'PUT',
+    ]
     # If you set this to False, Django will make some optimizations so as not
     # to load the internationalization machinery.
     USE_I18N = False

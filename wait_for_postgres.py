@@ -2,22 +2,25 @@ import os
 import logging
 from time import time, sleep
 import psycopg2
+check_timeout = os.getenv("POSTGRES_CHECK_TIMEOUT", 30)
+check_interval = os.getenv("POSTGRES_CHECK_INTERVAL", 1)
+interval_unit = "second" if check_interval == 1 else "seconds"
+config = {
+    "dbname": os.getenv("POSTGRES_DB", "postgres"),
+    "user": os.getenv("POSTGRES_USER", "postgres"),
+    "password": os.getenv("POSTGRES_PASSWORD", ""),
+    "host": os.getenv("DATABASE_URL", "postgres")
+}
 
 start_time = time()
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
-
-check_timeout = os.getenv("POSTGRES_CHECK_TIMEOUT", 30)
-check_interval = os.getenv("POSTGRES_CHECK_INTERVAL", 1)
-logger.info(os.getenv("DATABASE_URL", "postgres"))
-interval_unit = "second" if check_interval == 1 else "seconds"
-config = {
-    "host": os.getenv("DATABASE_URL", "postgres")
-}
+assert check_timeout > 0
+assert check_interval < check_timeout
 
 
-def pg_isready(host, user, password, dbname):
+def pg_is_ready(host, user, password, dbname):
     while time() - start_time < check_timeout:
         try:
             conn = psycopg2.connect(**vars())
@@ -30,6 +33,3 @@ def pg_isready(host, user, password, dbname):
 
     logger.error(f"We could not connect to Postgres within {check_timeout} seconds.")
     return False
-
-
-pg_isready(**config)
